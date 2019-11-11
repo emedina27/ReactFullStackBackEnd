@@ -12,12 +12,12 @@ app.use(bodyParser.json());
 
 app.get("/hello", (req, res) => res.send("Hello "));
 
-//server side
-app.get("/hello/:name"), (req, res) => res.send(`Hello ${req.params.name}`);
+/* server side: server takes value out pf specified section of url and put it into       response using url params */
+
+app.get("/hello/:name", (req, res) => res.send(`Hello ${req.params.name}`));
 
 //client side
 app.post("/hello", (req, res) => res.send(`Hello ${req.body.name}!`));
-
 
 //listen on port...
 app.listen(8000, () => console.log("Listening on port 8000"));
