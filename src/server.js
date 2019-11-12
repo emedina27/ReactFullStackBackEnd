@@ -43,6 +43,7 @@ app.post("/api/articles/:name/upvote", (req, res) => {
 });
 
 /*
+-------- COMMENT FUNCTION -----------------------------
 curly braces is the body of our call back (req,res).
 test in postman to detemrien what the body will look like.
 -Send request to add comment end-point.
@@ -63,14 +64,17 @@ app.post("/api/articles/:name/add-comment", (req, res) => {
 
   /*
   accesses array ->Name->comments then adds the username and text via .push
+  saving the previous push
   */
   articlesInfo[articleName].comments.push({ username, text });
-  // respsonse (200) code
+
+  // respsonse (200)
   res.status(200).send(articlesInfo[articleName]);
 
   // res.status(200).send(articlesInfo[articleName]);
 });
 
+/* --- Misc Gets and Post ------*/
 // app.get("/hello", (req, res) => res.send("Hello "));
 
 /* server side: server takes value out pf specified section of url and put it into       response using url params */
