@@ -44,10 +44,12 @@ cmd: npm install --save mongodb
 
 - Import {MongoClient} from Mongdb
 - Inside callback :
-  
+
 
 
 
 ------- Adding Mongodb to Express ---------
+ // Connect function is Asyncronuse-Returns a promise-Can use Async Await
+    //mongo client connect returns a client obj, can be used to query db.
 
 

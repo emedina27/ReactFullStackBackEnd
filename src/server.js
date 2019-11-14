@@ -11,36 +11,30 @@ const app = express();
 //Parses json object that is included with post request.
 app.use(bodyParser.json());
 
-//connects monogodb to express
+//------ connects monogodb to express -------------------------------------------------
 
-app.get("api/articles/:name", async (req, res) => {
+app.get("/api/articles/:name", async (req, res) => {
   try {
     const articleName = req.params.name;
-
-    // Connect function is Asyncronuse-Returns a promise-Can use Async Await
-    //mongo client connect returns a client obj, can be used to query db.
 
     const client = await MongoClient.connect("mongodb://localhost:27017", {
       useNewUrlParser: true
     });
 
-    //to query our db
     const db = client.db("my-app");
 
-    //then query like this
     const articleInfo = await db
       .collection("articles")
       .findOne({ name: articleName });
-
     res.status(200).json(articleInfo);
 
-    //closes connection to db
     client.close();
   } catch (error) {
     res.status(500).json({ message: "Error Connection to DB", error });
   }
 });
 
+//-------------------------------------------------------------------------------------
 //define a new end point to send request to update upvotes via post request
 app.post("/api/articles/:name/upvote", (req, res) => {
   //get name form params
