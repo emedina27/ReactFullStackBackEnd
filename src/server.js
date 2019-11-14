@@ -1,66 +1,47 @@
 import express from "express";
 import bodyParser from "body-parser";
-
-const articlesInfo = {
-  "learn-react": {
-    upvotes: 0,
-    comments: []
-  },
-  "learn-node": {
-    upvotes: 0,
-    comments: []
-  },
-  "my-thoughts-on-resumes": {
-    upvotes: 0,
-    comments: []
-  }
-};
-
-/*Installing MongoDB
-- After Install :
-- Terminal: "sudo mkdir -p /data/db"
-- Terminal: "sudo chown -R `id -un` data/db"
-- Start Server: mongod
-- Start db: mongo
-- create new db: use my-app
-- mongodb has a or many collection  ->  any numb of json objects --> each object called documents
-
--Added to db array of objects
-------------------------
-db.articles.insert([{
-    name: 'learn-react',
-... upvotes: 0,
-... comments: [],
-... }, {
-... name: 'learn-react',
-... upvotes: 0,
-... comments: [],
-... }, {
-... name: 'learn-node',
-... upvotes: 0,
-... comments: [],
-... }])
--------------------------
-commands inside db:
-
-db.articles.find({}).pretty()
-db.articles.find({name: 'learn-react'}).pretty()
-
-
-*/
+import { MongoClient } from "mongodb";
 
 // Request Types: Get,Post(+requestbody),Patch,Delete
 // run: npx babel-node src/server.js
 // Added body parser dependencies
-
 
 const app = express();
 
 //Parses json object that is included with post request.
 app.use(bodyParser.json());
 
-//define a new end point to send request to update upvotes via post request
+//connects monogodb to express
 
+app.get("api/articles/:name", async (req, res) => {
+  try {
+    const articleName = req.params.name;
+
+    // Connect function is Asyncronuse-Returns a promise-Can use Async Await
+    //mongo client connect returns a client obj, can be used to query db.
+
+    const client = await MongoClient.connect("mongodb://localhost:27017", {
+      useNewUrlParser: true
+    });
+
+    //to query our db
+    const db = client.db("my-app");
+
+    //then query like this
+    const articleInfo = await db
+      .collection("articles")
+      .findOne({ name: articleName });
+
+    res.status(200).json(articleInfo);
+
+    //closes connection to db
+    client.close();
+  } catch (error) {
+    res.status(500).json({ message: "Error Connection to DB", error });
+  }
+});
+
+//define a new end point to send request to update upvotes via post request
 app.post("/api/articles/:name/upvote", (req, res) => {
   //get name form params
   const articleName = req.params.name;
