@@ -11,7 +11,7 @@ const app = express();
 //Parses json object that is included with post request.
 app.use(bodyParser.json());
 
-//------ connects monogodb to express -------------------------------------------------
+//------ connects monogodb to express ---------------------------------
 
 app.get("/api/articles/:name", async (req, res) => {
   try {
@@ -34,25 +34,47 @@ app.get("/api/articles/:name", async (req, res) => {
   }
 });
 
-//-------------------------------------------------------------------------------------
+//---------------- Upvoting --------------------------------------
+
 //define a new end point to send request to update upvotes via post request
-app.post("/api/articles/:name/upvote", (req, res) => {
-  //get name form params
-  const articleName = req.params.name;
 
-  //target upvotes
-  articlesInfo[articleName].upvotes += 1;
+app.post("/api/articles/:name/upvote", async (req, res) => {
+  try {
+    //get name form params
+    const articleName = req.params.name;
+    const client = await MongoClient.connect("mongodb://localhost:27017", {
+      useNewUrlParser: true
+    });
 
-  //sending message
-  res
-    .status(200)
-    .send(
-      `${articleName} now has ${articlesInfo[articleName].upvotes} upvotes.`
+    const db = client.db("my-app");
+    const articleInfo = await db
+      .collection("articles")
+      .findOne({ name: articleName });
+
+    //here is the query
+    await db.collection("articles").updateOne(
+      { name: articleName },
+      {
+        $set: {
+          upvotes: articleInfo.upvotes + 1
+        }
+      }
     );
+
+    const updatedArticleInfo = await db
+      .collection("articles")
+      .findOne({ name: articleName });
+
+    res.status(200).json(updatedArticleInfo);
+
+    client.close();
+  } catch (error) {
+    res.status(500).json({ message: "Error connecting to db", error });
+  }
 });
 
 /*
--------- COMMENT FUNCTION -----------------------------
+-------- COMMENT FUNCTION -------------------------------------------------
 curly braces is the body of our call back (req,res).
 test in postman to detemrien what the body will look like.
 -Send request to add comment end-point.
@@ -65,10 +87,9 @@ test in postman to detemrien what the body will look like.
 - get articleName form url params
 - Next Just add the new comment in the req.body to      comments [] in the selected article.
 */
-app.post("/api/articles/:name/add-comment", (req, res) => {
-  const { username, text } = req.body;
 
-  // get articleName form url params
+app.post("/api/articles/:name/add-comment", (req, res) => {
+  const { username, text } = req.body; // get articleName form url params
   const articleName = req.params.name;
 
   /*
@@ -79,19 +100,8 @@ app.post("/api/articles/:name/add-comment", (req, res) => {
 
   // respsonse (200)
   res.status(200).send(articlesInfo[articleName]);
-
-  // res.status(200).send(articlesInfo[articleName]);
 });
 
-/* --- Misc Gets and Post ------*/
-// app.get("/hello", (req, res) => res.send("Hello "));
+//=-----------------------------------------------------------
 
-/* server side: server takes value out pf specified section of url and put it into       response using url params */
-
-// app.get("/hello/:name", (req, res) => res.send(`Hello ${req.params.name}`));
-
-//client side
-// app.post("/hello", (req, res) => res.send(`Hello ${req.body.name}!`));
-
-//listen on port...
 app.listen(8000, () => console.log("Listening on port 8000"));
