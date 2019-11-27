@@ -1,69 +1,45 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+To run locally
 
-## Available Scripts
+Requirements: MongoDBCommunnityServer
+https://www.mongodb.com/download-center/community
 
-In the project directory, you can run:
+You can download the MongoDB Community Server from the MongoDB download page. The download is a zip file. Unzip the contents, change the folder name to "mongodb", and move it to your users home directory. From there, create a "mongodb-data" directory in your user directory to store the database data.
+You can start the server using the following command. Make sure to swap out "/Users/Leo/" with the correct path to your users home directory.
 
-### `yarn start`
+/Users/em/mongodb/bin/mongod --dbpath=/Users/em/mongodb-data
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+1. git clone
+2. cd name of app
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+# Back End
 
-### `yarn test`
+3. yarn install
+4. create .env file in the root of your project and create environment variables listed below.
+   1. PORT=8080
+   2. SEND_GRID_API_KEY= get your own api key
+   3. JWT_SECRET= 'can be any password'
+   4. MONGODB_URL=mongodb://127.0.0.1:27017/nameofyourapp
+5. yarn dev
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+# Front End
 
-### `yarn build`
+1. cd client
+2. yarn
+3. yarn start
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Front end will run on port 3000 and will proxy to back end on port 8080
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+To run jest test suite run npm run test or yarn test
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+If you want a GUI for your database use either Robo3t or MongoDB Compass.
 
-### `yarn eject`
+Make sure to set environment variables for PORT, SENDGRID_API_KEY, JWT_SECRET, MONGODB_URL in a Config directory at the root of your project. Inside Config directory add test.env and dev.env each with those 4 variables.
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+To deploy:
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Set the same environment variables for heroku/dokku except the PORT variable can be left out.
+Heroku Environment variables can be set through the command line or directly on heroku.com.
+Dokku environments variables can be set from the command line only.
+dokku config:set appname KEY=value KEY_2=value2 KEY_3=value3
 
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `yarn build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
-# react-fullstack
+[![Run in Postman](https://run.pstmn.io/button.svg)](<https://app.getpostman.com/run-collection/9736846b31eae2710b6c#?env%5BTask%20Manager%20API%20(dev)%5D=W3siZGVzY3JpcHRpb24iOnsiY29udGVudCI6IiIsInR5cGUiOiJ0ZXh0L3BsYWluIn0sInZhbHVlIjoibG9jYWxob3N0OjMwMDAiLCJrZXkiOiJ1cmwiLCJlbmFibGVkIjp0cnVlfSx7InZhbHVlIjoiZXlKaGJHY2lPaUpJVXpJMU5pSXNJblI1Y0NJNklrcFhWQ0o5LmV5SmZhV1FpT2lJMVkyRTFOR05oWkRCa01qVTRNak5sT1ROa05UTmtZbVVpTENKcFlYUWlPakUxTlRRek56ZzNNeko5LlJEY1Q3c2V4d0NYZWh5Y3RwTDV2WG9HUDQxSW5KQ1ZSQVlmRzFMSjBEa0EiLCJrZXkiOiJhdXRoVG9rZW4iLCJlbmFibGVkIjp0cnVlfV0=>)

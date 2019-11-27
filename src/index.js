@@ -1,12 +1,12 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import * as serviceWorker from './serviceWorker';
+const app = require('./app');
+const port = process.env.PORT;
 
-ReactDOM.render(<App />, document.getElementById('root'));
+// Uncomment below to put server down for maintenance
+// app.use((req, res, next) => {
+// 	res.status(503).send('Site is currently down. Check back soon!');
+// });
 
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.unregister();
+//  Listen on port production or dev port
+app.listen(port, () => {
+	console.log('Server is running on port ' + port);
+});
